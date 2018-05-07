@@ -9,17 +9,17 @@ socket.on('disconnect', function () {
 })
 
 socket.on('newMessage', function (data) {
+    var formatedTime = moment(data.createAt).format('h:mm a');
     console.log('New msg:', data);
     var li = jQuery('<li></li>')
-    li.text(`${data.from} : ${data.text}`);
+    li.text(`${data.from}  ${formatedTime} : ${data.text}`);
 
     jQuery('#messages').append(li);
 })
 
 socket.on('newLocationMessage', function (message) {
-    console.log(message);
-    var li = jQuery(`<li>${message.from} : <a href=${message.url}>My current location</a></li>`)
-    console.log(message);
+    var formatedTime = moment(message.createAt).format('h:mm a');
+    var li = jQuery(`<li>${message.from} at ${formatedTime} : <a href=${message.url}>My current location</a></li>`)
     jQuery('#messages').append(li);
 })
 
@@ -29,7 +29,7 @@ jQuery('#message-form').on('submit', (e) => {
         from: 'User',
         text: jQuery('[name=message]').val()
     }, function () {
-
+        jQuery('[name=message]').val('')
     })
 })
 
