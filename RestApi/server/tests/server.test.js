@@ -35,6 +35,7 @@ describe('Post todos', () => {
             .expect(200)
             .expect((res) => {
                 expect(res.body.text).toBe(text);
+                done();
             })
             .end((err, res) => {
                 if (err) {
