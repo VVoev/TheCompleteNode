@@ -30,6 +30,10 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('User was disconected');
     })
+
+    socket.on('createLocationMessage', (coords) => {
+        io.emit('newMessage', generateMessage('Admin', `Lat:${coords.latitude.toFixed(2)} Lon:${coords.longitude.toFixed(2)}`))
+    })
 })
 
 server.listen(port, () => {

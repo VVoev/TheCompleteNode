@@ -10,11 +10,33 @@ socket.on('disconnect', function () {
 
 socket.on('newMessage', function (data) {
     console.log('New msg:', data);
+    var li = jQuery('<li></li>')
+    li.text(`${data.from} : ${data.text}`);
+
+    jQuery('#messages').append(li);
 })
 
-socket.emit('createMessage', {
-    from: 'Frank',
-    text: 'Hi'
-}, function (data) {
-    console.log('got it', data);
+jQuery('#message-form').on('submit', (e) => {
+    e.preventDefault();
+    socket.emit('createMessage', {
+        from: 'User',
+        text: jQuery('[name=message]').val()
+    }, function () {
+
+    })
+})
+
+jQuery('#send-location').on('click', (e) => {
+    if (!navigator.geolocation) {
+        return alert('Geolocation not suppored by your browser');
+    }
+
+    navigator.geolocation.getCurrentPosition((position) => {
+        socket.emit('createLocationMessage', {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        })
+    }, () => {
+        alert('Unable to fetch location');
+    })
 })
